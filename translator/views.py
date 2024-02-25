@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView
 from rest_framework import status
@@ -7,8 +6,6 @@ from rest_framework import status
 from .transliterator import transliterate
 from .models import TextTrans, FileTrans
 from .serializers import TextTransSerializer, FileTransSerializer
-
-# from .transliterator import translit1
 
 
 class TextView(CreateAPIView):
