@@ -1,3 +1,6 @@
+import re
+
+
 def transliterate(context: str, from_: str, to: str):
     '''
     context -> str oladi, text kritiladi o'zgartirilishi kerak bo'lgan
@@ -38,12 +41,6 @@ def transliterate(context: str, from_: str, to: str):
         'Ғ': 'G‘',
         'Ш': 'Sh',
         'Ч': 'Ch',
-        'Нг': 'Ng',
-        'НГ': 'NG',
-        'ЙЮ': 'YYU',
-        'Йю': 'Yyu',
-        'ЙЁ': 'YYO',
-        'Йё': 'Yyo',
         'а': 'a',
         'б': 'b',
         'д': 'd',
@@ -73,32 +70,15 @@ def transliterate(context: str, from_: str, to: str):
         'ғ': 'g‘',
         'ш': 'sh',
         'ч': 'ch',
-        'нг': 'ng',
         'ъ': '’',
         'ы': 'i',
-        'йю': 'yyu',
-        'йё': 'yyo',
         'ь': '',
-        'ЪЕ': 'YE',
-        'ЪЁ': 'YO',
-        'ЪЯ': 'YA',
-        'ЪЮ': 'YU',
-        'ЬЕ': 'YE',
-        'ЬЁ': 'YO',
-        'ЬЯ': 'YA',
-        'ЬЮ': 'YU',
-        'ъе': 'ye',
-        'ъё': 'yo',
-        'ё': 'yo',
-        'Ё': 'YO',
-        'ъя': 'ya',
-        'ъю': 'yu',
-        'ье': 'ye',
-        'ьё': 'yo',
-        'ья': 'ya',
         'я': 'ya',
         'Я': 'YA',
         'Ю': 'YU',
+        'ю': 'yu',
+        'ё': 'yo',
+        'Ё': 'YO',
     }
 
     lat_cyr = {
@@ -125,26 +105,6 @@ def transliterate(context: str, from_: str, to: str):
         'X': 'Х',
         'Y': 'Й',
         'Z': 'З',
-        'O‘': 'Ў',
-        'G‘': 'Ғ',
-        'SH': 'Ш',
-        'Sh': 'Ш',
-        'CH': 'Ч',
-        'Ch': 'Ч',
-        'NG': 'НГ',
-        'Ng': 'Нг',
-        'NG‘': 'НҒ',
-        'Ng‘': 'Нғ',
-        'YE': 'Е',
-        'YO': 'Ё',
-        'YU': 'Ю',
-        'YA': 'Я',
-        'YO‘': 'ЙЎ',
-        'Ye': 'Е',
-        'Yo': 'Ё',
-        'Yu': 'Ю',
-        'Ya': 'Я',
-        'Yo‘': 'Йў',
         'a': 'а',
         'b': 'б',
         'd': 'д',
@@ -157,7 +117,6 @@ def transliterate(context: str, from_: str, to: str):
         'l': 'л',
         'm': 'м',
         'n': 'н',
-        'o': 'о',
         'p': 'п',
         'q': 'қ',
         'r': 'р',
@@ -168,29 +127,35 @@ def transliterate(context: str, from_: str, to: str):
         'x': 'х',
         'y': 'й',
         'z': 'з',
-        'o‘': 'ў',
-        'g‘': 'ғ',
-        'sh': 'ш',
-        'ch': 'ч',
-        'ng': 'нг',
-        'ng‘': 'нғ',
-        'ʼ': 'ъ',
-        'ye': 'е',
-        'yo': 'ё',
-        'yu': 'ю',
-        'ya': 'я',
-        'yo‘': 'йў',
     }
 
     result = ""
 
     if to == "lat":
-        letter_replacer = context.replace('Нг','Ng').replace('НГ','NG').replace('ЙЮ','YYU').replace('Йю','Yyu'). \
-            replace('ЙЁ','YYO').replace('Йё','Yyo').replace('нг','ng').replace('ъ','’').replace('ы','i'). \
-            replace('йю','yyu').replace('йё','yyo').replace('ь','').replace('ЪЕ','YE').replace('ЪЁ','YO'). \
-            replace('ЪЯ','YA').replace('ЪЮ','YU').replace('ЬЕ','YE').replace('ЬЁ','YO').replace('ЬЯ','YA'). \
-            replace('ЬЮ','YU').replace('ъе','ye').replace('ъё','yo').replace('ъя','ya').replace('ъю','yu').\
-            replace('ье','ye').replace('ьё','yo').replace('ья','ya').replace('ю','yu')
+        letter_replacer = re.sub(r"(НГ|Нг)", "Ng", context)
+        letter_replacer = re.sub(r"ЙЮ", "YYU", letter_replacer)
+        letter_replacer = re.sub(r"Йю", "Yyu", letter_replacer)
+        letter_replacer = re.sub(r"ЙЁ", "YYO", letter_replacer)
+        letter_replacer = re.sub(r"Йё", "Yyo", letter_replacer)
+        letter_replacer = re.sub(r"ЪЁ", "YO", letter_replacer)
+        letter_replacer = re.sub(r"ЪЕ", "YE", letter_replacer)
+        letter_replacer = re.sub(r"ЪЯ", "YA", letter_replacer)
+        letter_replacer = re.sub(r"ЪЮ", "YU", letter_replacer)
+        letter_replacer = re.sub(r"ЬЁ", "YO", letter_replacer)
+        letter_replacer = re.sub(r"ЬЕ", "YE", letter_replacer)
+        letter_replacer = re.sub(r"ЬЯ", "YA", letter_replacer)
+        letter_replacer = re.sub(r"ЬЮ", "YU", letter_replacer)
+        letter_replacer = re.sub(r"нг", "ng", letter_replacer)
+        letter_replacer = re.sub(r"йю", "yyu", letter_replacer)
+        letter_replacer = re.sub(r"йё", "yyo", letter_replacer)
+        letter_replacer = re.sub(r"ъё", "yo", letter_replacer)
+        letter_replacer = re.sub(r"ъе", "ye", letter_replacer)
+        letter_replacer = re.sub(r"ъя", "ya", letter_replacer)
+        letter_replacer = re.sub(r"ъю", "yu", letter_replacer)
+        letter_replacer = re.sub(r"ьё", "yo", letter_replacer)
+        letter_replacer = re.sub(r"ье", "ye", letter_replacer)
+        letter_replacer = re.sub(r"ья", "ya", letter_replacer)
+        letter_replacer = re.sub(r"ью", "yu", letter_replacer)
 
         for i in letter_replacer:
             if i in cyr_lat:
@@ -200,13 +165,29 @@ def transliterate(context: str, from_: str, to: str):
         return result
 
     elif to == "cyr":
-        letter_replacer = context.replace('Oʻ', 'Ў').replace('G‘', 'Ғ').replace('SH', 'Ш').replace('Sh', 'Ш'). \
-            replace('CH', 'Ч').replace('Ch', 'Ч').replace('NG', 'НГ').replace('Ng', 'Нг').replace('NG‘', 'НҒ'). \
-            replace('Ng‘', 'Нғ').replace('YE', 'Е').replace('YO', 'Ё').replace('YU', 'Ю').replace('YA', 'Я'). \
-            replace('YO‘', 'ЙЎ').replace('Ye', 'Е').replace('Yo', 'Ё').replace('Yu', 'Ю').replace('Ya', 'Я'). \
-            replace('Yo‘', 'Йў').replace('oʻ', 'ў').replace('gʻ','ғ').replace('sh', 'ш').replace('ch', 'ч').replace('ng', 'нг'). \
-            replace('ng‘', 'нғ').replace('ʼ', 'ъ').replace('ye', 'е').replace('yo', 'ё').replace('yu', 'ю'). \
-            replace('ya', 'я').replace('yoʻ', 'йў')
+        letter_replacer = re.sub(r"(Oʻ|O'|O‘)", "Ў", context)
+        letter_replacer = re.sub(r"(SH|Sh)", "Ш", letter_replacer)
+        letter_replacer = re.sub(r"(CH|Ch)", "Ч", letter_replacer)
+        letter_replacer = re.sub(r"(NG|Ng)", "НГ", letter_replacer)
+        letter_replacer = re.sub(r"NG'", "НҒ", letter_replacer)
+        letter_replacer = re.sub(r"(Gʻ|G'|G‘)", "Ғ", letter_replacer)
+        letter_replacer = re.sub(r"(YE|Ye)", "E", letter_replacer)
+        letter_replacer = re.sub(r"(YO|Yo)", "Ё", letter_replacer)
+        letter_replacer = re.sub(r"(YU|Yu)", "Ю", letter_replacer)
+        letter_replacer = re.sub(r"(YA|Ya)", "Я", letter_replacer)
+        letter_replacer = re.sub(r"(YO'|Yo')", "ЙЎ", letter_replacer)
+        letter_replacer = re.sub(r"(oʻ|o'|o‘)", "ў", letter_replacer,)
+        letter_replacer = re.sub(r"sh", "ш", letter_replacer)
+        letter_replacer = re.sub(r"ch", "ч", letter_replacer)
+        letter_replacer = re.sub(r"ng", "нг", letter_replacer)
+        letter_replacer = re.sub(r"ng'", "НҒ", letter_replacer)
+        letter_replacer = re.sub(r"(gʻ|g'|g‘)", "ғ", letter_replacer,)
+        letter_replacer = re.sub(r"( ʻ|'|‘|’)", "ъ", letter_replacer)
+        letter_replacer = re.sub(r"(ye)", "е", letter_replacer)
+        letter_replacer = re.sub(r"(yo)", "ё", letter_replacer)
+        letter_replacer = re.sub(r"(yu)", "ю", letter_replacer)
+        letter_replacer = re.sub(r"(ya)", "я", letter_replacer)
+        letter_replacer = re.sub(r"yo'", "йў", letter_replacer)
 
         for i in letter_replacer:
             if i in lat_cyr:
